@@ -1,0 +1,33 @@
+This file has the code for connecting to an API and parsing the code and presenting it in the console.
+
+API Used: DomainsDB.info
+
+*****************************************
+
+import requests
+import json
+
+if __name__ == '__main__':
+    print('enter your query')
+    query = input()
+    response = requests.get('https://api.domainsdb.info/v1/domains/search?domain=' + query)
+    print("Results for the keyword: " + query)
+    # if you have a JSON string, you can parse it by using the json.loads() method, the result will be a Python
+    # dictionary.
+    res = json.loads(response.text)
+    # .items() used to return the list / dict items with all dictionary keys with values.
+    di = list(res.items())
+
+    if di[0][0] == 'message':
+        print("Results Not Found! Try Again")
+    else:
+        for item, value in di:
+            if item == 'domains':
+                for it in range(len(value)):
+                    print("Domain : " + value[it]['domain'])
+                    print("Country : " + str(value[it]['country']))
+                    print("IPs : " + str(value[it]['A']))
+                    print("Name Servers : " + str(value[it]['NS']))
+                    print("\n")
+                    
+*****************************************
